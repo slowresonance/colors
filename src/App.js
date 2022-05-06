@@ -2,64 +2,63 @@ import { useEffect, useState, useRef } from "react";
 import "./styles/style.css";
 import Circle from "./components/Circle";
 
-const variables = [
-  "f_high",
-  "f_med",
-  "f_low",
-  "f_inv",
-  "b_high",
-  "b_med",
-  "b_low",
-  "b_inv",
-  "background",
-];
-
-const getColors = () => {
-  const vals = [];
-  variables.forEach((variable) => {
-    vals.push(
-      getComputedStyle(document.querySelector(":root"))
-        .getPropertyValue(`--${variable}`)
-        .trim()
-        .toUpperCase()
-    );
-  });
-  return vals;
-};
-
-const updateColors = (vals) => {
-  variables.forEach((variable, i) => {
-    document.querySelector(":root").style.setProperty(variable, vals[i]);
-  });
+const getCurrentColors = () => {
+  // gets current colors from the document
+  let currentColors = {};
+  for (let key in spec) {
+    currentColors[key] = getComputedStyle(document.querySelector(":root"))
+      .getPropertyValue(`--${key}`)
+      .trim()
+      .toUpperCase();
+  }
+  return currentColors;
 };
 
 function App() {
-  const [colors, setColors] = useState(getColors());
+  const [colors, setColors] = useState(getCurrentColors());
   const [target, setTarget] = useState("");
   const inputRef = useRef();
-
-  useEffect(() => {
-    updateColors(colors);
-  }, [colors]);
 
   useEffect(() => {
     if (target !== "") inputRef.current.focus();
   }, [target]);
 
+  useEffect(() => {
+    applyColors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [colors]);
+
+  const applyColors = () => {
+    console.log(getCurrentColors());
+    for (let key in colors) {
+      document
+        .querySelector(":root")
+        .style.setProperty(`--${key}`, colors[key]);
+    }
+    console.log(getCurrentColors());
+  };
+
   const handleEnter = (e) => {
-    // check if e is valid
-    // if (e.key === "Enter") {
-    //   setColors([colors.map((color)=> )])
-    // }
+    // handle wrong cases
+    if (e.key === "Enter") {
+      let updatedColors = {};
+      Object.keys(colors).map((key) =>
+        key.replace("_", "-") === target
+          ? (updatedColors[key] = `#${e.target.value}`)
+          : (updatedColors[key] = colors[key])
+      );
+
+      setColors(updatedColors);
+    }
   };
 
   return (
     <>
       <div id="canvas">
-        {variables.map(
-          (variable) =>
-            variable !== "background" && (
-              <Circle id={variable.replace("_", "-")} setTarget={setTarget} />
+        {Object.keys(colors).map(
+          (key) =>
+            key !== "background" && (
+              <Circle id={key.replace("_", "-")} setTarget={setTarget} />
             )
         )}
       </div>
@@ -101,5 +100,17 @@ function App() {
     </>
   );
 }
+
+let spec = {
+  background: "#222222",
+  f_high: "#eeeeee",
+  f_med: "#cccccc",
+  f_low: "#aaaaaa",
+  f_inv: "#777777",
+  b_high: "#333333",
+  b_med: "#444444",
+  b_low: "#555555",
+  b_inv: "#666666",
+};
 
 export default App;
