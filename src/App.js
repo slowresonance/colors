@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./styles/style.css";
+import Circle from "./components/Circle";
 
 const variables = [
-  "--f_high",
-  "--f_med",
-  "--f_low",
-  "--f_inv",
-  "--b_high",
-  "--b_med",
-  "--b_low",
-  "--b_inv",
-  "--background",
+  "f_high",
+  "f_med",
+  "f_low",
+  "f_inv",
+  "b_high",
+  "b_med",
+  "b_low",
+  "b_inv",
+  "background",
 ];
 
 const getColors = () => {
@@ -18,7 +19,7 @@ const getColors = () => {
   variables.forEach((variable) => {
     vals.push(
       getComputedStyle(document.querySelector(":root"))
-        .getPropertyValue(variable)
+        .getPropertyValue(`--${variable}`)
         .trim()
         .toUpperCase()
     );
@@ -34,6 +35,8 @@ const updateColors = (vals) => {
 
 function App() {
   const [colors, setColors] = useState(getColors());
+  const [target, setTarget] = useState("");
+  // const [inputRef] = useRef();
 
   useEffect(() => {
     updateColors(colors);
@@ -49,20 +52,20 @@ function App() {
   return (
     <>
       <div id="canvas">
-        <div className="circle" id="f-high"></div>
-        <div className="circle" id="f-med"></div>
-        <div className="circle" id="f-low"></div>
-        <div className="circle" id="f-inv"></div>
-        <div className="circle" id="b-high"></div>
-        <div className="circle" id="b-med"></div>
-        <div className="circle" id="b-low"></div>
-        <div className="circle" id="b-inv"></div>
+        {variables.map((variable) => {
+          if (variable !== "background") {
+            return (
+              <Circle id={variable.replace("_", "-")} setTarget={setTarget} />
+            );
+          }
+        })}
       </div>
       <div id="input-container">
         <div id="hex">#</div>
         <input
           type="text"
           id="input"
+          // ref={inputRef}
           placeholder="101010"
           spellCheck="false"
           autoComplete="chrome-off"
