@@ -1,0 +1,142 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@450;600&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+body {
+  background: #111;
+  font-family: var(--font);
+}
+
+.circle {
+  width: var(--c-diameter);
+  height: var(--c-diameter);
+  border-radius: var(--c-radius);
+
+  cursor: pointer;
+}
+
+#input-container {
+  display: flex;
+  align-items: center;
+  width: calc(6 * var(--c-diameter));
+  background: #1b1b1b;
+}
+
+#hex,
+#input,
+#save {
+  height: 40px;
+  font-size: var(--font-size);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-sizing: border-box;
+  letter-spacing: 2px;
+}
+
+#hex,
+#save {
+  font-size: var(--font-size);
+  font-weight: 600;
+
+  color: #666666;
+  user-select: none;
+}
+
+#hex {
+  padding: 10px;
+}
+
+#input {
+  border: none;
+  outline: none;
+  width: 100%;
+
+  color: #eee;
+  background: #1b1b1b;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+#input,
+#input::placeholder {
+  font-weight: 400;
+  font-family: var(--font);
+}
+
+#save {
+  stroke: #666666;
+  padding: 10px;
+  cursor: pointer;
+}
+
+#save:hover {
+  stroke: #ccc;
+}
+
+#input:active {
+  border: none;
+}
+
+#canvas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: calc(var(--c-diameter) * 4);
+
+  padding: var(--c-diameter);
+  background: var(--background);
+}
+
+#f-high {
+  background: var(--f_high);
+}
+
+#f-med {
+  background: var(--f_med);
+}
+
+#f-low {
+  background: var(--f_low);
+}
+
+#f-inv {
+  background: var(--f_inv);
+}
+
+#b-high {
+  background: var(--b_high);
+}
+
+#b-med {
+  background: var(--b_med);
+}
+
+#b-low {
+  background: var(--b_low);
+}
+
+#b-inv {
+  background: var(--b_inv);
+}
+
+:root {
+  --c-diameter: 30px;
+  --c-radius: calc(var(--c-diameter) / 2);
+  --font: "Fira Code", monospace;
+  --font-size: 20px;
+
+  --background: #222222;
+  --f_high: #eeeeee;
+  --f_med: #cccccc;
+  --f_low: #aaaaaa;
+  --f_inv: #777777;
+  --b_high: #333333;
+  --b_med: #444444;
+  --b_low: #555555;
+  --b_inv: #666666;
+}
