@@ -20,6 +20,7 @@ function App() {
   const inputRef = useRef();
 
   useEffect(() => {
+    console.log(target);
     if (target !== "") inputRef.current.focus();
   }, [target]);
 
@@ -50,9 +51,17 @@ function App() {
     e.target.value = "";
   };
 
+  const handleClick = (e) => {
+    e.target.id === "scircle" ? setTarget("") : setTarget(e.target.id);
+  };
+
   return (
     <>
-      <div id="canvas">
+      <div
+        id="background"
+        className={`${target === "background" ? "selected" : ""}`}
+        onClick={handleClick}
+      >
         {Object.keys(colors).map(
           (key) =>
             key !== "background" && (
@@ -60,6 +69,7 @@ function App() {
                 id={key.replace("_", "-")}
                 target={target}
                 setTarget={setTarget}
+                handleClick={handleClick}
               />
             )
         )}

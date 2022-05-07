@@ -82,13 +82,14 @@ body {
   border: none;
 }
 
-#canvas {
+#background {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   width: calc(var(--c-diameter) * 4);
 
   padding: var(--c-diameter);
   background: var(--background);
+  cursor: pointer;
 }
 
 #f-high {
@@ -140,10 +141,14 @@ body {
   --b_inv: #666666;
 }
 
-.selected {
+.circle.selected {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#background.selected {
+  box-shadow: inset 0px 0px 0px 10px var(--b_high);
 }
 
 #scircle {

@@ -109,7 +109,7 @@ body {
   border: none;
 }
 
-#canvas {
+#background {
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (1fr)[4];
@@ -117,6 +117,7 @@ body {
   width: calc(var(--c-diameter) * 4);
   padding: var(--c-diameter);
   background: var(--background);
+  cursor: pointer;
 }
 
 #f-high {
@@ -167,7 +168,7 @@ body {
   --b_inv: #666666;
 }
 
-.selected {
+.circle.selected {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -177,6 +178,11 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+}
+
+#background.selected {
+  -webkit-box-shadow: inset 0px 0px 0px 10px var(--b_high);
+          box-shadow: inset 0px 0px 0px 10px var(--b_high);
 }
 
 #scircle {

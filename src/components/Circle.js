@@ -1,10 +1,6 @@
 import React from "react";
 
-const Circle = ({ id, target, setTarget }) => {
-  const handleClick = (e) => {
-    e.target.id === "scircle" ? setTarget("") : setTarget(e.target.id);
-  };
-
+const Circle = ({ id, target, setTarget, handleClick }) => {
   return (
     <div
       className={`circle ${target === id ? "selected" : ""}`}
