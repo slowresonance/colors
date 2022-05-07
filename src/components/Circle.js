@@ -1,11 +1,19 @@
 import React from "react";
 
-const Circle = ({ id, setTarget }) => {
+const Circle = ({ id, target, setTarget }) => {
   const handleClick = (e) => {
-    setTarget(e.target.id);
-    console.log(e.target.id);
+    e.target.id === "scircle" ? setTarget("") : setTarget(e.target.id);
   };
-  return <div className="circle" id={id} onClick={handleClick}></div>;
+
+  return (
+    <div
+      className={`circle ${target === id ? "selected" : ""}`}
+      id={id}
+      onClick={handleClick}
+    >
+      {target === id ? <div id="scircle"></div> : ""}
+    </div>
+  );
 };
 
 export default Circle;

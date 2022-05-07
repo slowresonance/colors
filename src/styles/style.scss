@@ -49,7 +49,7 @@ body {
 }
 
 #hex {
-  padding: 10px;
+  padding: 10px 5px 10px 10px;
 }
 
 #input {
@@ -59,7 +59,6 @@ body {
 
   color: #eee;
   background: #1b1b1b;
-  text-align: center;
   text-transform: uppercase;
 }
 
@@ -139,4 +138,17 @@ body {
   --b_med: #444444;
   --b_low: #555555;
   --b_inv: #666666;
+}
+
+.selected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#scircle {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: var(--background);
 }

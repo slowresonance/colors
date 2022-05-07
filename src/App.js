@@ -29,27 +29,25 @@ function App() {
   }, [colors]);
 
   const applyColors = () => {
-    console.log(getCurrentColors());
     for (let key in colors) {
       document
         .querySelector(":root")
         .style.setProperty(`--${key}`, colors[key]);
     }
-    console.log(getCurrentColors());
   };
 
   const handleEnter = (e) => {
     // handle wrong cases
-    if (e.key === "Enter") {
-      let updatedColors = {};
-      Object.keys(colors).map((key) =>
-        key.replace("_", "-") === target
-          ? (updatedColors[key] = `#${e.target.value}`)
-          : (updatedColors[key] = colors[key])
-      );
+    let updatedColors = {};
+    Object.keys(colors).map((key) =>
+      key.replace("_", "-") === target
+        ? (updatedColors[key] = `#${e.target.value}`)
+        : (updatedColors[key] = colors[key])
+    );
 
-      setColors(updatedColors);
-    }
+    setColors(updatedColors);
+
+    e.target.value = "";
   };
 
   return (
@@ -58,7 +56,11 @@ function App() {
         {Object.keys(colors).map(
           (key) =>
             key !== "background" && (
-              <Circle id={key.replace("_", "-")} setTarget={setTarget} />
+              <Circle
+                id={key.replace("_", "-")}
+                target={target}
+                setTarget={setTarget}
+              />
             )
         )}
       </div>
@@ -72,7 +74,7 @@ function App() {
           spellCheck="false"
           autoComplete="chrome-off"
           maxLength={6}
-          onKeyDown={handleEnter}
+          onKeyDown={(e) => e.key === "Enter" && handleEnter(e)}
         />
         <div id="save">
           <svg

@@ -59,7 +59,7 @@ body {
 }
 
 #hex {
-  padding: 10px;
+  padding: 10px 5px 10px 10px;
 }
 
 #input {
@@ -68,7 +68,6 @@ body {
   width: 100%;
   color: #eee;
   background: #1b1b1b;
-  text-align: center;
   text-transform: uppercase;
 }
 
@@ -166,5 +165,24 @@ body {
   --b_med: #444444;
   --b_low: #555555;
   --b_inv: #666666;
+}
+
+.selected {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+#scircle {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: var(--background);
 }
 /*# sourceMappingURL=style.css.map */
