@@ -14,15 +14,66 @@ const getCurrentColors = () => {
   return currentColors;
 };
 
+const dateToYMD = (date) => {
+  var strArray = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  var d = date.getDate();
+  var m = strArray[date.getMonth()];
+  var y = date.getFullYear();
+  return "" + (d <= 9 ? "0" + d : d) + "-" + m + "-" + y;
+};
+
 function App() {
   const [colors, setColors] = useState(getCurrentColors());
   const [target, setTarget] = useState("");
+  const [saveInput, setSaveInput] = useState(false);
   const inputRef = useRef();
+  const saveRef = useRef();
+
+  const exportSvg = (fname, content) => {
+    const filename =
+      fname === "" ? `colors-${dateToYMD(new Date())}.svg` : `${fname}.svg`;
+    const blob = new Blob([content], {
+      type: "text/json",
+    });
+
+    const link = document.createElement("a");
+
+    link.download = filename;
+    link.href = window.URL.createObjectURL(blob);
+    link.dataset.downloadurl = ["text/json", link.download, link.href].join(
+      ":"
+    );
+
+    const event = new MouseEvent("click", {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+    });
+
+    link.dispatchEvent(event);
+    link.remove();
+  };
 
   useEffect(() => {
-    console.log(target);
     if (target !== "") inputRef.current.focus();
   }, [target]);
+
+  useEffect(() => {
+    if (saveInput === true) saveRef.current.focus();
+  }, [saveInput]);
 
   useEffect(() => {
     applyColors();
@@ -38,17 +89,41 @@ function App() {
   };
 
   const handleEnter = (e) => {
-    // handle wrong cases
+    const input = `#${e.target.value}`;
+    const hexregx = /^#?([a-f0-9]{6}|[a-f0-9]{3})$/;
+    if (input === "") return;
+    if (!input.match(hexregx)) return;
+
     let updatedColors = {};
     Object.keys(colors).map((key) =>
       key.replace("_", "-") === target
-        ? (updatedColors[key] = `#${e.target.value}`)
+        ? (updatedColors[key] = `${input}`)
         : (updatedColors[key] = colors[key])
     );
 
     setColors(updatedColors);
 
     e.target.value = "";
+  };
+
+  const handleSave = (e) => {
+    let content = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" height="64px" width="96px">
+    <rect fill="${colors["background"]}" id="background" height="64" width="96"></rect>
+    
+    <circle fill="${colors["f_high"]}" id="f_high" r="8" cy="24" cx="24"></circle>
+    <circle fill="${colors["f_med"]}" id="f_med" r="8" cy="24" cx="40"></circle>
+    <circle fill="${colors["f_low"]}" id="f_low" r="8" cy="24" cx="56"></circle>
+    <circle fill="${colors["f_inv"]}" id="f_inv" r="8" cy="24" cx="72"></circle>
+    
+    <circle fill="${colors["b_high"]}" id="b_high" r="8" cy="40" cx="24"></circle>
+    <circle fill="${colors["b_med"]}" id="b_med" r="8" cy="40" cx="40"></circle>
+    <circle fill="${colors["b_low"]}" id="b_low" r="8" cy="40" cx="56"></circle>
+    <circle fill="${colors["b_inv"]}" id="b_inv" r="8" cy="40" cx="72"></circle>
+  </svg>`;
+    exportSvg(e.target.value, content);
+
+    saveRef.current.value = "";
+    setSaveInput(false);
   };
 
   const handleClick = (e) => {
@@ -74,19 +149,24 @@ function App() {
             )
         )}
       </div>
-      <div id="input-container">
+      <div className="input-container">
         <div id="hex">#</div>
         <input
           type="text"
-          id="input"
+          id="color-input"
           ref={inputRef}
           placeholder="101010"
           spellCheck="false"
-          autoComplete="chrome-off"
+          autoComplete="new-password"
           maxLength={6}
           onKeyDown={(e) => e.key === "Enter" && handleEnter(e)}
         />
-        <div id="save">
+        <div
+          id="save"
+          onClick={(e) => {
+            setSaveInput(true);
+          }}
+        >
           <svg
             width="12"
             height="14"
@@ -109,6 +189,25 @@ function App() {
           </svg>
         </div>
       </div>
+      {saveInput === true ? (
+        <div className="input-container">
+          <input
+            type="text"
+            id="fname-input"
+            placeholder="Save theme as"
+            spellCheck="false"
+            ref={saveRef}
+            onBlur={(e) => {
+              setSaveInput(false);
+            }}
+            autoComplete="new-password"
+            maxLength={6}
+            onKeyDown={(e) => e.key === "Enter" && handleSave(e)}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
     </>
   );
 }

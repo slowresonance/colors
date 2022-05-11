@@ -18,7 +18,7 @@ body {
   cursor: pointer;
 }
 
-#input-container {
+.input-container {
   display: flex;
   align-items: center;
   width: calc(6 * var(--c-diameter));
@@ -26,8 +26,9 @@ body {
 }
 
 #hex,
-#input,
-#save {
+#color-input,
+#save,
+#fname-input {
   height: 40px;
   font-size: var(--font-size);
 
@@ -36,7 +37,6 @@ body {
   align-items: center;
 
   box-sizing: border-box;
-  letter-spacing: 2px;
 }
 
 #hex,
@@ -52,20 +52,29 @@ body {
   padding: 10px 5px 10px 10px;
 }
 
-#input {
+#color-input,
+#fname-input {
   border: none;
   outline: none;
   width: 100%;
 
   color: #eee;
   background: #1b1b1b;
-  text-transform: uppercase;
 }
 
-#input,
-#input::placeholder {
+#color-input,
+#color-input::placeholder {
   font-weight: 400;
   font-family: var(--font);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+#fname-input {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #141414;
+  font-family: monospace;
 }
 
 #save {
@@ -78,7 +87,7 @@ body {
   stroke: #ccc;
 }
 
-#input:active {
+#color-input:active {
   border: none;
 }
 
