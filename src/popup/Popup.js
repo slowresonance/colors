@@ -35,7 +35,7 @@ const dateToYMD = (date) => {
   return "" + (d <= 9 ? "0" + d : d) + "-" + m + "-" + y;
 };
 
-function App() {
+function Popup() {
   const [colors, setColors] = useState(getCurrentColors());
   const [target, setTarget] = useState("");
   const [saveInput, setSaveInput] = useState(false);
@@ -77,8 +77,15 @@ function App() {
 
   useEffect(() => {
     applyColors();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [colors]);
+
+  useEffect(() => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, {
+        cmd: "popup-start",
+      });
+    });
+  }, []);
 
   const applyColors = () => {
     for (let key in colors) {
@@ -102,8 +109,17 @@ function App() {
     );
 
     setColors(updatedColors);
-
     e.target.value = "";
+
+    // send the updated colors to content
+
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, {
+        from: "popup",
+        cmd: "update-colors",
+        colors: updatedColors,
+      });
+    });
   };
 
   const handleSave = (e) => {
@@ -125,6 +141,16 @@ function App() {
     saveRef.current.value = "";
     setSaveInput(false);
   };
+
+  // Message resolver
+
+  chrome.runtime.onMessage.addListener((msg) => {
+    switch (msg.cmd) {
+      case "set-initial-colors":
+        setColors(msg.colors);
+        break;
+    }
+  });
 
   const handleClick = (e) => {
     e.target.id === "scircle" ? setTarget("") : setTarget(e.target.id);
@@ -224,4 +250,4 @@ let spec = {
   b_inv: "#666666",
 };
 
-export default App;
+export default Popup;
