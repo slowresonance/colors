@@ -227,7 +227,6 @@ function Popup() {
               setSaveInput(false);
             }}
             autoComplete="new-password"
-            maxLength={6}
             onKeyDown={(e) => e.key === "Enter" && handleSave(e)}
           />
         </div>
